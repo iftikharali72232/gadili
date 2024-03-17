@@ -57,7 +57,7 @@ class AuthController extends Controller
                 'user_id' => $user->id
             ]);
             return response([
-                'users' => $user,
+                'user' => $user,
                 'token' => $user->createToken('secret')->plainTextToken,
             ]);
         } else {
@@ -121,7 +121,7 @@ class AuthController extends Controller
                 'user_id' => $user->id
             ]);
             return response([
-                'users' => $user,
+                'user' => $user,
                 'token' => $user->createToken('secret')->plainTextToken,
             ]);
         } else {

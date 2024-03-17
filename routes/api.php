@@ -37,7 +37,7 @@ Route::get('/allCategories', [CategoryController::class,'categories'])->name('al
 Route::get('/getAllShops/{id}', [ShopController::class, 'getAllShops'])->name('getAllShops');
 Route::get('/getProduct/{id}', [ProductController::class,'getProduct'])->name('getProduct');
 Route::get('/productList/{id}', [ProductController::class, 'productList'])->name('productList');
-Route::get('/getAllCategory', [CategoryController::class, 'getAllCategories'])->name('getAllCategories');
+Route::get('/getAllCategory/{flag}', [CategoryController::class, 'getAllCategories'])->name('getAllCategories');
 Route::post("/searchProduct", [ProductController::class, 'searchProduct'])->name('searchProduct');
 Route::get("/getBanners", [BannerController::class, 'getBanners'])->name('getBanners');
 Route::get('/getCategory/{id}', [CategoryController::class, 'getCategory'])->name('getCategory');

@@ -144,22 +144,73 @@ class CategoryController extends Controller
         return $imageName;
     }
 
-    public function getAllCategories()
+    public function getAllCategories($flag = "popular")
     {
-        $categories = DB::select("SELECT * FROM categories WHERE status=1");
-        if(count($categories) > 0) 
+        if($flag == "popular")
         {
-            // print_r(json_decode(json_encode($categories), true)); exit;
-            return response([
-                'status'=> '1',
-                'categories'=> json_decode(json_encode($categories), true),
-                'image_base_url' => asset('images/')
-            ]);
-        } else {
-            return response([
-                'status'=> '0',
-                'categories'=> []
-            ], 404);
+            $categories = Category::with(['products' => function ($query) {
+                $query->withCount('orderItems')
+                      ->orderByDesc('order_items_count')
+                      ->limit(3);
+            }])->get();
+                    if(count($categories) > 0) 
+                    {
+                        // print_r(json_decode(json_encode($categories), true)); exit;
+                        return response()->json([
+                            'status'=> '1',
+                            'categories'=> $categories,
+                            'cat_base_url' => asset('uploads/'),
+                            'image_base_url' => asset('images/')
+                        ]);
+                    } else {
+                        return response([
+                            'status'=> '0',
+                            'categories'=> []
+                        ], 404);
+                    }
+        } else if($flag == "new")
+        {
+            $categories = Category::with(['products' => function ($query) {
+                            $query->orderByDesc('id')->limit(3);
+                        }])->get();
+            if(count($categories) > 0) 
+            {
+                // print_r(json_decode(json_encode($categories), true)); exit;
+                return response()->json([
+                    'status'=> '1',
+                    'categories'=> $categories,
+                    'cat_base_url' => asset('uploads/'),
+                    'image_base_url' => asset('images/')
+                ]);
+            } else {
+                return response([
+                    'status'=> '0',
+                    'categories'=> []
+                ], 404);
+            }
+
+        } else if($flag == 'sales')
+        {
+            $categories = Category::with(['products' => function ($query) {
+                $query->withCount('orderItems')
+                      ->orderByDesc('order_items_count')
+                      ->limit(3);
+            }])->get();
+                    if(count($categories) > 0) 
+                    {
+                        // print_r(json_decode(json_encode($categories), true)); exit;
+                        return response()->json([
+                            'status'=> '1',
+                            'categories'=> $categories,
+                            'cat_base_url' => asset('uploads/'),
+                            'image_base_url' => asset('images/')
+                        ]);
+                    } else {
+                        return response([
+                            'status'=> '0',
+                            'categories'=> []
+                        ], 404);
+                    }
         }
     }
     public function delete($id)
