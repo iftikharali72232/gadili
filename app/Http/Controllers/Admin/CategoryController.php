@@ -189,7 +189,7 @@ class CategoryController extends Controller
                 ], 404);
             }
 
-        } else if($flag == 'sales')
+        } else if($flag == 'sale')
         {
             $categories = Category::with(['products' => function ($query) {
                 $query->withCount('orderItems')

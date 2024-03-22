@@ -47,7 +47,21 @@ class ShopController extends Controller
         {
             $file_name = $this->upload($request);
         }
-
+        $images = [];
+            if(isset($_FILES['galary_images']))
+            {
+                // print_r($_FILES['images']); exit;
+                if ($request->hasFile('galary_images')) {
+                    foreach ($request->file('galary_images') as $image) {
+                        
+                        $imageName = time() . '_' . $image->getClientOriginalName();
+                        $image->move(public_path('images'), $imageName);
+                        // You may also store the image information in the database if needed.
+                        $images[] = $imageName;
+                    }
+        
+                }
+            }
         // Create New record
         $shop = Shop::create([
             "name"=> $attrs["name"],
@@ -58,6 +72,7 @@ class ShopController extends Controller
             "reg_no"=> $attrs["reg_no"],
             "created_by"=> auth()->user()->id,
             "description"=> $request->description,
+            'galary_images' => json_encode($images)
         ]);
         if(!empty($file_name))
         {
@@ -116,6 +131,21 @@ class ShopController extends Controller
                 $file_name = $this->upload($request);
             }
     
+            $images = [];
+            if(isset($_FILES['galary_images']))
+            {
+                // print_r($_FILES['images']); exit;
+                if ($request->hasFile('galary_images')) {
+                    foreach ($request->file('galary_images') as $image) {
+                        
+                        $imageName = time() . '_' . $image->getClientOriginalName();
+                        $image->move(public_path('images'), $imageName);
+                        // You may also store the image information in the database if needed.
+                        $images[] = $imageName;
+                    }
+        
+                }
+            }
             // Create New record
             $shop = DB::table('shops')->where('id', '=', $id)->update([
                 "name"=> $attrs["name"],
@@ -125,6 +155,7 @@ class ShopController extends Controller
                 "location"=> $request->location,
                 "reg_no"=> $attrs["reg_no"],
                 "description"=> isset($request->description) ? $request->description : $shop->description,
+                "galary_images" => count($images) > 0 ? json_encode($images) : $shop->galary_images
             ]);
             
             if($shop)

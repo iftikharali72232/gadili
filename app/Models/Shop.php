@@ -20,7 +20,8 @@ class Shop extends Model
         "created_by",
         "description",
         "latitude",
-        "longitude"
+        "longitude",
+        "galary_images"
     ];
     protected $hidden = [
     ];

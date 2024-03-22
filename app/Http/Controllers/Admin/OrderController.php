@@ -371,11 +371,18 @@ class OrderController extends Controller
 
     public function recentOrders()
     {
-        $orders = DB::select("SELECT * FROM orders WHERE user_id = :uid ORDER BY id DESC LIMIT 10", [':uid' => auth()->user()->id]);
+        $user = auth()->user();
+        $recentOrders = $user->orders()
+            ->with('orderItems.product') // Eager load relationships
+            // ->where('order_status', 1)
+            ->orderByDesc('created_at')
+            ->take(5)
+            ->get();
         // print_r($orders);
-        return response([
+        return response()->json([
             'status' => 1,
-            'orders' => json_decode(json_encode($orders), true)
+            'image_base_url' => asset('images/'),
+            'orders' => $recentOrders
         ]);
     }
 
