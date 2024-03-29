@@ -256,7 +256,7 @@ class ProductController extends Controller
         {
             if(isset($shop[0]->category_id) && $shop[0]->category_id > 0)
             {
-                $product = DB::select("SELECT * FROM products WHERE status=1 AND created_by =".$shop[0]->created_by);
+                $product = DB::select("SELECT * FROM products WHERE status=1 AND shop_id =".$id);
                 if(count($product) > 0){
                     foreach($product as $key => $item){
                         $is_like = DB::table('wish_lists')->where('product_id', $item->id)->get();
