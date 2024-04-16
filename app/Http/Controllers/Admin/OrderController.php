@@ -261,12 +261,32 @@ class OrderController extends Controller
 
     public function orderList()
     {
-        $orders = Order::orderBy("id","desc")->paginate(30);
-        // print_r(json_decode(json_encode($orders), true));
-        return response([
-            "status"=> "1",
-            "orders"=> json_decode(json_encode($orders), true)
-        ]);
+        $user = auth()->user();
+
+        $recentOrders = $user->orders()
+             ->with(['orderItems' => function ($query) {
+                 $query->select('id', 'order_id', 'product_id', 'item_quantity'); // Limit columns for order items
+             }, 'orderItems.product' => function ($query) {
+                 $query->select('id', 'p_name', 'price', 'images'); // Limit columns for products
+             }])
+             ->select('id', 'created_at', 'seller_id') // Limit columns for orders
+             ->orderByDesc('created_at')
+             ->get();
+         // print_r($orders);
+         // $recentOrders = Order::where('user_id', $user->id)->get(['id', 'total', 'order_status','seller_id', 'user_id', 'payment_method','manual_order']);
+         if(count($recentOrders) > 0)
+         {
+             foreach($recentOrders as $key => $order)
+             {
+                 $shop = Shop::where('created_by', $order->seller_id)->get('name');
+                 $recentOrders[$key]['shop_name'] = isset($shop[0]) ? $shop[0]->name : "";
+             }
+         }
+         return response()->json([
+             'status' => 1,
+             'image_base_url' => asset('images/'),
+             'orders' => $recentOrders
+         ]);
     }
 
     public function orderListByUserId()
@@ -372,13 +392,27 @@ class OrderController extends Controller
     public function recentOrders()
     {
         $user = auth()->user();
-        $recentOrders = $user->orders()
-            ->with('orderItems.product') // Eager load relationships
-            // ->where('order_status', 1)
+
+       $recentOrders = $user->orders()
+            ->with(['orderItems' => function ($query) {
+                $query->select('id', 'order_id', 'product_id', 'item_quantity'); // Limit columns for order items
+            }, 'orderItems.product' => function ($query) {
+                $query->select('id', 'p_name', 'price', 'images'); // Limit columns for products
+            }])
+            ->select('id', 'created_at', 'seller_id') // Limit columns for orders
             ->orderByDesc('created_at')
-            ->take(5)
+            ->take(10)
             ->get();
         // print_r($orders);
+        // $recentOrders = Order::where('user_id', $user->id)->get(['id', 'total', 'order_status','seller_id', 'user_id', 'payment_method','manual_order']);
+        if(count($recentOrders) > 0)
+        {
+            foreach($recentOrders as $key => $order)
+            {
+                $shop = Shop::where('created_by', $order->seller_id)->get('name');
+                $recentOrders[$key]['shop_name'] = isset($shop[0]) ? $shop[0]->name : "";
+            }
+        }
         return response()->json([
             'status' => 1,
             'image_base_url' => asset('images/'),
