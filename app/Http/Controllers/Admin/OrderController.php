@@ -278,8 +278,8 @@ class OrderController extends Controller
          {
              foreach($recentOrders as $key => $order)
              {
-                 $shop = Shop::where('created_by', $order->seller_id)->get('name');
-                 $recentOrders[$key]['shop_name'] = isset($shop[0]) ? $shop[0]->name : "";
+                 $shop = Shop::where('created_by', $order->seller_id)->get('name, logo');
+                 $recentOrders[$key]['shop'] = isset($shop[0]) ? $shop[0] : "";
              }
          }
          return response()->json([
@@ -409,8 +409,8 @@ class OrderController extends Controller
         {
             foreach($recentOrders as $key => $order)
             {
-                $shop = Shop::where('created_by', $order->seller_id)->get('name');
-                $recentOrders[$key]['shop_name'] = isset($shop[0]) ? $shop[0]->name : "";
+                $shop = Shop::where('created_by', $order->seller_id)->get('name, logo');
+                 $recentOrders[$key]['shop'] = isset($shop[0]) ? $shop[0] : "";
             }
         }
         return response()->json([
