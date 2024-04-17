@@ -278,7 +278,7 @@ class OrderController extends Controller
          {
              foreach($recentOrders as $key => $order)
              {
-                 $shop = Shop::where('created_by', $order->seller_id)->get(['name, logo']);
+                 $shop = Shop::where('created_by', $order->seller_id)->get(['name', 'logo', 'galary_images']);
                  $recentOrders[$key]['shop'] = isset($shop[0]) ? $shop[0] : "";
              }
          }
@@ -409,7 +409,7 @@ class OrderController extends Controller
         {
             foreach($recentOrders as $key => $order)
             {
-                $shop = Shop::where('created_by', $order->seller_id)->get(['name, logo']);
+                $shop = Shop::where('created_by', $order->seller_id)->get(['name', 'logo', 'galary_images']);
                  $recentOrders[$key]['shop'] = isset($shop[0]) ? $shop[0] : "";
             }
         }
