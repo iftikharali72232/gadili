@@ -269,7 +269,7 @@ class OrderController extends Controller
              }, 'orderItems.product' => function ($query) {
                  $query->select('id', 'p_name', 'price', 'images'); // Limit columns for products
              }])
-             ->select('id', 'total', 'order_status','seller_id', 'user_id', 'payment_method','manual_order') // Limit columns for orders
+             ->select('id', 'total', 'order_status','seller_id', 'user_id', 'payment_method','manual_order','pickup_date_time') // Limit columns for orders
              ->orderByDesc('created_at')
              ->get();
          // print_r($orders);
@@ -399,7 +399,7 @@ class OrderController extends Controller
             }, 'orderItems.product' => function ($query) {
                 $query->select('id', 'p_name', 'price', 'images'); // Limit columns for products
             }])
-            ->select('id', 'total', 'order_status','seller_id', 'user_id', 'payment_method','manual_order') // Limit columns for orders
+            ->select('id', 'total', 'order_status','seller_id', 'user_id', 'payment_method','manual_order','pickup_date_time') // Limit columns for orders
             ->orderByDesc('created_at')
             ->take(10)
             ->get();
