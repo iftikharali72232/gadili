@@ -249,7 +249,7 @@ class AuthController extends Controller
         $attrs = $request->validate([
             "mobile"=> "required|string",
             "password"=> "required|min:6",
-            "device_token" => "required"
+            // "device_token" => "required"
         ]);
         $data = $attrs;
         unset($data['device_token']);
@@ -272,10 +272,12 @@ class AuthController extends Controller
                     'message' => "Invalid Credentials.",
                 ], 403);
             }
-
-            DB::table('users')->where('mobile', $attrs['mobile'])->update([
-                'device_token' => $attrs['device_token']
-            ]);
+            if(isset($request->device_token))
+            {
+                DB::table('users')->where('mobile', $attrs['mobile'])->update([
+                    'device_token' => $attrs['device_token']
+                ]);
+            }
                 // return redirect()->route("")->with("success","");
                 return response([
                     'user' => auth()->user(),
