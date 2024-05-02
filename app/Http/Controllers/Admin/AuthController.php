@@ -116,7 +116,12 @@ class AuthController extends Controller
                 "reg_no"=> $_POST['reg_no'],
                 "created_by"=> $user->id,
             ]);
-
+            if(!$shop)
+            {
+                return response([
+                    "message" => "Shop not created successfully."
+                ]);
+            }
             Wallet::create([
                 'user_id' => $user->id
             ]);
