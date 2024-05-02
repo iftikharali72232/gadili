@@ -249,10 +249,10 @@ class AuthController extends Controller
         $attrs = $request->validate([
             "mobile"=> "required|string",
             "password"=> "required|min:6",
-            // "device_token" => "required"
+            "device_token" => "required"
         ]);
         $data = $attrs;
-        // unset($data['device_token']);
+        unset($data['device_token']);
        $user = User::where('mobile', $attrs['mobile'])->first();
        if($user)
        {//    print_r($user->mobile); exit;
@@ -273,9 +273,9 @@ class AuthController extends Controller
                 ], 403);
             }
 
-            // DB::table('users')->where('mobile', $attrs['mobile'])->update([
-            //     'device_token' => $attrs['device_token']
-            // ]);
+            DB::table('users')->where('mobile', $attrs['mobile'])->update([
+                'device_token' => $attrs['device_token']
+            ]);
                 // return redirect()->route("")->with("success","");
                 return response([
                     'user' => auth()->user(),
