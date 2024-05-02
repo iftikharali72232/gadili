@@ -111,9 +111,9 @@ class AuthController extends Controller
         {
             // Create New record
             $shop = Shop::create([
-                "name"=> $_POST["shop_name"],
-                "category_id"=> $_POST['category_id'],
-                "reg_no"=> $_POST['reg_no'],
+                "name"=> $request->shop_name,
+                "category_id"=> $request->category_id,
+                "reg_no"=> $request->reg_no,
                 "created_by"=> $user->id,
             ]);
             if(!$shop)
