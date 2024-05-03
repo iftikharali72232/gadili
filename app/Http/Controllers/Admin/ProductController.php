@@ -111,7 +111,7 @@ class ProductController extends Controller
         } else {
             return response([
                 'status' => "0",
-                "message" => "Shop not found"
+                "message" => "category not found"
             ], 200);
         }
     }

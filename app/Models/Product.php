@@ -22,6 +22,7 @@ class Product extends Model
         "taxable",
         "tax_inclusive",
         "description",
+        'category_id'
     ];
     protected $hidden = [
     ];
