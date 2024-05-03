@@ -341,7 +341,12 @@ class ProductController extends Controller
     {
         $user = auth()->user();
         $count = Product::where('created_by', $user->id)->count();
-        $products = DB::table('products')->where('created_by', $user->id)->orderByDesc('id')->paginate(10);
+        $products = Product::with(['category' => function ($query) {
+            $query->select('id', 'name'); // Assuming you want to fetch only id and name from categories
+        }])
+        ->where('created_by', $user->id)
+        ->orderByDesc('id')
+        ->paginate(10);
 
         return response([
             'status' => 1,
