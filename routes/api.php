@@ -82,6 +82,8 @@ Route::group(["middleware"=> "auth:sanctum"], function () {
     Route::get('/sellerProducts', [ProductController::class, 'sellerProducts'])->name('sellerProducts');
     Route::post('/deleteImage', [ProductController::class, 'deleteImage'])->name('deleteImage');
     Route::post('/updateImages', [ProductController::class, 'updateImages'])->name('updateImages');
+    
+    Route::get('/sellerDropDownProductsList', [ProductController::class, 'sellerAllProducts'])->name('sellerAllProducts');
 
     // Cart requests
     Route::post('/cart', [CartController::class,'cart'])->name('cart');

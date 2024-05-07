@@ -445,4 +445,11 @@ class ProductController extends Controller
         
     }
    
+    public function sellerAllProducts()
+    {
+        $user = auth()->user();
+        $products = Product::where('created_by', $user->id)->get();
+
+        return response()->json(['data' => $products]);
+    }
 }
