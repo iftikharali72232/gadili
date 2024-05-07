@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ShopController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CartController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\WishListController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\OrderController;
@@ -78,6 +80,8 @@ Route::group(["middleware"=> "auth:sanctum"], function () {
     Route::post('/updateProduct/{id}', [ProductController::class, 'updateProduct'])->name('updateProduct');
     Route::get('/allProducts/{id}', [ProductController::class,'products'])->name('allProducts');
     Route::get('/sellerProducts', [ProductController::class, 'sellerProducts'])->name('sellerProducts');
+    Route::post('/deleteImage', [ProductController::class, 'deleteImage'])->name('deleteImage');
+    Route::post('/updateImages', [ProductController::class, 'updateImages'])->name('updateImages');
 
     // Cart requests
     Route::post('/cart', [CartController::class,'cart'])->name('cart');
@@ -128,5 +132,9 @@ Route::group(["middleware"=> "auth:sanctum"], function () {
     Route::get("/walletHistory", [WalletController::class, 'walletHistory'])->name('walletHistory');
     Route::get("/walletNotification", [WalletController::class, 'walletNotification'])->name('walletNotification');
     Route::get("/walletReadNotify/{flag}", [WalletController::class, 'walletReadNotify'])->name('walletReadNotify');
+
+    Route::apiResource('coupons', CouponController::class);
+
+    Route::apiResource('ads', AdController::class);
 
 });

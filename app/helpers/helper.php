@@ -19,7 +19,9 @@ function removeImages($imageArray, $multi_images = 0) {
         if(File::exists(public_path('/images/'.$imageArray))) {
             //     echo "success"; exit;
                 File::delete(public_path('/images/'.$imageArray));
+                return true;
             }
+            return false;
     }
     
 }

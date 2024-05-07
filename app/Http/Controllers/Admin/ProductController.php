@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ad;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Shop;
-
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -64,21 +65,6 @@ class ProductController extends Controller
         if($category)
         {
 
-            $images = [];
-            if(isset($_FILES['images']))
-            {
-                // print_r($_FILES['images']); exit;
-                if ($request->hasFile('images')) {
-                    foreach ($request->file('images') as $image) {
-                        
-                        $imageName = time() . '_' . $image->getClientOriginalName();
-                        $image->move(public_path('images'), $imageName);
-                        // You may also store the image information in the database if needed.
-                        $images[] = $imageName;
-                    }
-        
-                }
-            }
             $shop = Shop::where('created_by', auth()->user()->id)->first();
             $product = Product::create([
                 "p_name"=> $attrs["p_name"],
@@ -87,7 +73,6 @@ class ProductController extends Controller
                 "category_id"=> $attrs['category_id'],
                 "shop_id" => $shop->id,
                 "created_by"=> auth()->user()->id,
-                "images"=> json_encode($images),
                 "description" => $request->description,
                 "tax" => round($tax_value, 2),
                 "discount" => round($discount_value, 2),
@@ -167,7 +152,8 @@ class ProductController extends Controller
             $data = DB::table('products')->where('id','=', $id)->first();
             if($data)
             {
-                $images = [];
+                $pdata = Product::find($id);
+                $images = json_decode($pdata->images, true);
                 if(isset($_FILES['images']))
                 {
                     // print_r($_FILES['images']); exit;
@@ -355,5 +341,108 @@ class ProductController extends Controller
         ]);
     }
 
+    public function deleteImage(Request $req)
+    {
+        $req->validate([
+            'name' => 'required',
+            'id' => 'required|int',
+            'flag' => 'required'
+        ]);
+        
+        if($req->flag == 'product')
+        {
+            if (removeImages($req->name)) {
+                    $product = Product::find($req->id);
+                    $images = json_decode($product->images, true);
+                    if(is_array($images) && count($images) > 0)
+                    {
+                        foreach($images as $key => $img)
+                        {
+                            if($img == $req->name)
+                            {
+                                unset($images[$key]);
+                            }
+                        }
+                        DB::table('products')->where('id' , $req->id)->update(['images' => json_encode($images)]);
+                    }
+                    return response()->json(['message' => 'Image deleted successfully'], 200);
+            } else {
+                return response()->json(['message' => 'Image not found'], 200);
+            }
+
+        } else {
+            if (removeImages($req->name)) {
+                    $ad = Ad::find($req->id);
+                    $images = json_decode($ad->images, true);
+                    if(is_array($images) && count($images) > 0)
+                    {
+                        foreach($images as $key => $img)
+                        {
+                            if($img == $req->name)
+                            {
+                                unset($images[$key]);
+                            }
+                        }
+                        DB::table('ads')->where('id' , $req->id)->update(['images' => json_encode($images)]);
+                    }
+                    return response()->json(['message' => 'Image deleted successfully'], 200);
+            } else {
+                return response()->json(['message' => 'Image not found'], 200);
+            }
+        }
+        
+    }
+    public function updateImages(Request $req)
+    {
+        $req->validate([
+            'images' => 'required',
+            'id' => 'required|int',
+            'flag' => 'required'
+        ]);
+        
+        if($req->flag == 'product')
+        {
+            $product = Product::find($req->id);
+            $images = json_decode($product->images, true);
+            if(isset($_FILES['images']))
+            {
+                // print_r($_FILES['images']); exit;
+                if ($req->hasFile('images')) {
+                    foreach ($req->file('images') as $image) {
+                        
+                        $imageName = time() . '_' . $image->getClientOriginalName();
+                        $image->move(public_path('images'), $imageName);
+                        // You may also store the image information in the database if needed.
+                        $images[] = $imageName;
+                    }
+        
+                }
+            }
+            
+            DB::table('products')->where('id' , $req->id)->update(['images' => json_encode($images)]);
+            return response()->json(['message' => 'Images upload successfully'], 200);
+        } else {
+            $ad = Ad::find($req->id);
+            $images = json_decode($ad->images, true);
+            if(isset($_FILES['images']))
+            {
+                // print_r($_FILES['images']); exit;
+                if ($req->hasFile('images')) {
+                    foreach ($req->file('images') as $image) {
+                        
+                        $imageName = time() . '_' . $image->getClientOriginalName();
+                        $image->move(public_path('images'), $imageName);
+                        // You may also store the image information in the database if needed.
+                        $images[] = $imageName;
+                    }
+        
+                }
+            }
+            
+            DB::table('ads')->where('id' , $req->id)->update(['images' => json_encode($images)]);
+            return response()->json(['message' => 'Images upload successfully'], 200);
+        }
+        
+    }
    
 }
