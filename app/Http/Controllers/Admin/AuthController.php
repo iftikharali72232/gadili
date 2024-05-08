@@ -44,6 +44,7 @@ class AuthController extends Controller
             "street_address" => $request->address,
             "status"=> 1,
             "country" => $request->country,
+            "f_uid" => $request->f_uid
         ]);
         if(!empty($file_name))
         {
@@ -100,6 +101,7 @@ class AuthController extends Controller
             "street_address" => $request->address,
             "status"=> 0,
             "country" => $request->country,
+            "f_uid" => $request->f_uid
         ]);
         if(!empty($file_name))
         {

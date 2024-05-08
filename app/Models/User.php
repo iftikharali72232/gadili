@@ -28,7 +28,8 @@ class User extends Authenticatable
         'status',
         'address',
         'country',
-        'otp'
+        'otp',
+        "f_uid"
     ];
 
     /**
