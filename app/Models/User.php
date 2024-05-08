@@ -31,7 +31,7 @@ class User extends Authenticatable
         'otp',
         "f_uid"
     ];
-
+//okoko
     /**
      * The attributes that should be hidden for serialization.
      *
