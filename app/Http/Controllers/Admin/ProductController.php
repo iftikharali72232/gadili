@@ -65,6 +65,22 @@ class ProductController extends Controller
         if($category)
         {
 
+                $images = [];
+                if(isset($_FILES['images']))
+                {
+                    // print_r($_FILES['images']); exit;
+                    if ($request->hasFile('images')) {
+                        foreach ($request->file('images') as $image) {
+                            
+                            $imageName = time() . '_' . $image->getClientOriginalName();
+                            $image->move(public_path('images'), $imageName);
+                            // You may also store the image information in the database if needed.
+                            $images[] = $imageName;
+                        }
+            
+                    }
+                }
+
             $shop = Shop::where('created_by', auth()->user()->id)->first();
             $product = Product::create([
                 "p_name"=> $attrs["p_name"],
@@ -74,6 +90,7 @@ class ProductController extends Controller
                 "shop_id" => $shop->id,
                 "created_by"=> auth()->user()->id,
                 "description" => $request->description,
+                "images"=> json_encode($images),
                 "tax" => round($tax_value, 2),
                 "discount" => round($discount_value, 2),
                 "taxable" => $request->taxable,
@@ -152,29 +169,28 @@ class ProductController extends Controller
             $data = DB::table('products')->where('id','=', $id)->first();
             if($data)
             {
-                $pdata = Product::find($id);
-                $images = json_decode($pdata->images, true);
-                if(isset($_FILES['images']))
-                {
-                    // print_r($_FILES['images']); exit;
-                    if ($request->hasFile('images')) {
-                        foreach ($request->file('images') as $image) {
+                // $pdata = Product::find($id);
+                // $images = json_decode($pdata->images, true);
+                // if(isset($_FILES['images']))
+                // {
+                //     // print_r($_FILES['images']); exit;
+                //     if ($request->hasFile('images')) {
+                //         foreach ($request->file('images') as $image) {
                             
-                            $imageName = time() . '_' . $image->getClientOriginalName();
-                            $image->move(public_path('images'), $imageName);
-                            // You may also store the image information in the database if needed.
-                            $images[] = $imageName;
-                        }
+                //             $imageName = time() . '_' . $image->getClientOriginalName();
+                //             $image->move(public_path('images'), $imageName);
+                //             // You may also store the image information in the database if needed.
+                //             $images[] = $imageName;
+                //         }
             
-                    }
-                }
+                //     }
+                // }
 
                 $product = DB::table('products')->where('id', '=', $id)->update([
                     "p_name"=> $attrs["p_name"],
                     "p_name_ar"=> $attrs["p_name_ar"],
                     "price"=> $attrs["price"],
                     "category_id"=> $attrs["category_id"],
-                    "images"=> count($images) > 0 ? json_encode($images) : $data->images,
                     "description" => isset($request->description) ? $request->description : $data->description,
                     "tax" => round($tax_value,2),
                     "discount" => round($discount_value,2),
