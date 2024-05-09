@@ -294,14 +294,28 @@ class OrderController extends Controller
         $user = auth()->user();
         if($user->user_type == 1)
         {
-            $orders = Order::with('orderItems, orderItems.product')->where("seller_id", "=", auth()->user()->id)->orderByDesc('id')->paginate(30);
+            $orders = Order::with(['orderItems' => function ($query) {
+                            $query->select('id', 'order_id', 'product_id', 'item_quantity'); // Limit columns for order items
+                        }, 'orderItems.product' => function ($query) {
+                            $query->select('id', 'p_name', 'price', 'images'); // Limit columns for products
+                        }])
+                        ->select('id', 'total', 'order_status','seller_id', 'user_id', 'payment_method','manual_order','pickup_date_time') // Limit columns for orders
+                        ->where("seller_id", "=", auth()->user()->id)
+                        ->orderByDesc('created_at')->paginate(30);
             
             return response([
                 'status' => "1",
                 "orders" =>json_decode(json_encode($orders), true)
             ]);
         } else {
-            $orders = Order::with('orderItems, orderItems.product')->where("user_id", "=", auth()->user()->id)->orderByDesc('id')->paginate(30);
+            $orders = Order::with(['orderItems' => function ($query) {
+                            $query->select('id', 'order_id', 'product_id', 'item_quantity'); // Limit columns for order items
+                        }, 'orderItems.product' => function ($query) {
+                            $query->select('id', 'p_name', 'price', 'images'); // Limit columns for products
+                        }])
+                        ->select('id', 'total', 'order_status','seller_id', 'user_id', 'payment_method','manual_order','pickup_date_time') // Limit columns for orders
+                        ->where("user_id", "=", auth()->user()->id)
+                        ->orderByDesc('created_at')->paginate(30);
             
             return response([
                 'status' => "1",
