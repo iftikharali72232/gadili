@@ -29,7 +29,8 @@ class User extends Authenticatable
         'address',
         'country',
         'otp',
-        "f_uid"
+        "f_uid",
+        "device_token"
     ];
 //okoko
     /**
