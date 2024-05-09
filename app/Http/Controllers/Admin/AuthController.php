@@ -282,7 +282,7 @@ class AuthController extends Controller
             if(isset($request->device_token))
             {
                 DB::table('users')->where('mobile', $attrs['mobile'])->update([
-                    'device_token' => $attrs['device_token']
+                    'device_token' => $request->device_token
                 ]);
             }
                 // return redirect()->route("")->with("success","");
