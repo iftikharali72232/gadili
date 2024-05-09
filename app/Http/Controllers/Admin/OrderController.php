@@ -297,7 +297,7 @@ class OrderController extends Controller
             $orders = Order::with(['orderItems' => function ($query) {
                             $query->select('id', 'order_id', 'product_id', 'item_quantity'); // Limit columns for order items
                         }, 'orderItems.product' => function ($query) {
-                            $query->select('id', 'p_name', 'price', 'images'); // Limit columns for products
+                            $query->select('id', 'p_name', 'price', 'images', 'category_id'); // Limit columns for products
                         },
                         'orderItems.product.category' => function ($query) {
                             $query->select('id', 'name'); // Assuming the category has these fields
@@ -315,7 +315,7 @@ class OrderController extends Controller
             $orders = Order::with(['orderItems' => function ($query) {
                             $query->select('id', 'order_id', 'product_id', 'item_quantity'); // Limit columns for order items
                         }, 'orderItems.product' => function ($query) {
-                            $query->select('id', 'p_name', 'price', 'images'); // Limit columns for products
+                            $query->select('id', 'p_name', 'price', 'images', 'category_id'); // Limit columns for products
                         },
                         'orderItems.product.category' => function ($query) {
                             $query->select('id', 'name'); // Assuming the category has these fields
