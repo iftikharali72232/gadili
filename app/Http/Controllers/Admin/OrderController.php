@@ -291,12 +291,24 @@ class OrderController extends Controller
 
     public function orderListByUserId()
     {
-        $orders = DB::table('orders')->where("user_id", "=", auth()->user()->id)->orderByDesc('id')->paginate(30);
-        
-        return response([
-            'status' => "1",
-            "orders" =>json_decode(json_encode($orders), true)
-        ]);
+        $user = auth()->user();
+        if($user->user_type == 1)
+        {
+            $orders = Order::with('orderItems')->where("seller_id", "=", auth()->user()->id)->orderByDesc('id')->paginate(30);
+            
+            return response([
+                'status' => "1",
+                "orders" =>json_decode(json_encode($orders), true)
+            ]);
+        } else {
+            $orders = Order::with('orderItems')->where("user_id", "=", auth()->user()->id)->orderByDesc('id')->paginate(30);
+            
+            return response([
+                'status' => "1",
+                "orders" =>json_decode(json_encode($orders), true)
+            ]);
+
+        }
     }
 
     public function get($id)
