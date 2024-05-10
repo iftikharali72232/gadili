@@ -12,7 +12,7 @@ class AdController extends Controller
     public function index()
     {
         $ads = Ad::all();
-        return response()->json($ads);
+        return response()->json(['status' => 1, 'data' => $ads]);
     }
 
     public function store(Request $request)
@@ -45,7 +45,7 @@ class AdController extends Controller
             }
             $data['images'] = json_encode($images);
             $ad = Ad::create($data);
-            return response()->json($ad, 201);
+            return response()->json(['status' => 1, 'data' => $ad]);
 
         } else {
             return response()->json(['msg' => "Product not found"]);
@@ -54,7 +54,7 @@ class AdController extends Controller
 
     public function show(Ad $ad)
     {
-        return response()->json($ad);
+        return response()->json(['status' => 1, 'data' => $ad]);
     }
 
     public function update(Request $request, Ad $ad)
@@ -66,31 +66,14 @@ class AdController extends Controller
             'end_date' => 'date|after_or_equal:start_date',
             'description' => 'nullable|string',
         ]);
-        print_r($request->hasFile('images')); exit;
-        $ad = Ad::find($ad->id);
-        $images = json_decode($ad->images, true);
-            if(isset($_FILES['images']))
-            {
-                // print_r($_FILES['images']); exit;
-                if ($request->hasFile('images')) {
-                    foreach ($request->file('images') as $image) {
-                        
-                        $imageName = time() . '_' . $image->getClientOriginalName();
-                        $image->move(public_path('images'), $imageName);
-                        // You may also store the image information in the database if needed.
-                        $images[] = $imageName;
-                    }
         
-                }
-            }
-            $data['images'] = json_encode($images);
         $ad->update($data);
-        return response()->json($ad);
+        return response()->json(['status' => 1, 'data' => $ad]);
     }
 
     public function destroy(Ad $ad)
     {
         $ad->delete();
-        return response()->json(['message' => 'Ad deleted successfully'], 200);
+        return response()->json(['status' => 1,'message' => 'Ad deleted successfully'], 200);
     }
 }

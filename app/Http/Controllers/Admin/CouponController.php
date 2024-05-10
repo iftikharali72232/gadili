@@ -12,11 +12,11 @@ class CouponController extends Controller
     public function index()
     {
         $coupons = Coupon::all();
-        return response()->json($coupons);
+        return response()->json(['status' => 1, 'data' => $coupons]);
     }
     public function show(Coupon $coupon)
     {
-        return response()->json($coupon);
+        return response()->json(['status' => 1, 'data' => $coupon]);
     }
     public function store(Request $request)
     {
@@ -27,7 +27,7 @@ class CouponController extends Controller
         ]);
 
         $coupon = Coupon::create($request->all());
-        return response()->json($coupon, 201);
+        return response()->json(['status' => 1, 'data' => $coupon]);
     }
 
     public function update(Request $request, Coupon $coupon)
@@ -39,7 +39,7 @@ class CouponController extends Controller
         ]);
 
         $coupon->update($request->all());
-        return response()->json($coupon);
+        return response()->json(['status' => 1, 'data' => $coupon]);
     }
 
     public function destroy(Coupon $coupon)
