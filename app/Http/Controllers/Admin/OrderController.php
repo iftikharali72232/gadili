@@ -464,7 +464,7 @@ class OrderController extends Controller
 
         $count = Order::where('seller_id', $user->id)->where('manual_order', 0)->count();
 
-        $pcount = Order::where('created_by', $user->id)->count();
+        $pcount = Product::where('created_by', $user->id)->count();
 
         // $manualOrderCounter = Order::where('seller_id', $user->id)->where('manual_order', 1)->where('is_response', 0)->count();
 

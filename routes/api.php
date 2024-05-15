@@ -70,7 +70,7 @@ Route::group(["middleware"=> "auth:sanctum"], function () {
     // shop requests
     Route::post('/createShop', [ShopController::class,'create'])->name('createShop');
     Route::post('/updateShop/{id}', [ShopController::class, 'updateShop'])->name('updateShop');
-    Route::get('/getShop/{id}', [ShopController::class, 'get'])->name('getShop');
+    Route::get('/getShop', [ShopController::class, 'get'])->name('getShop');
     Route::get('/deleteShop/{id}', [ShopController::class, 'delete'])->name('deleteShop');
     Route::get('/allShops', [ShopController::class,'shops'])->name('allShops');
 
