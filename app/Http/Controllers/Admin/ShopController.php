@@ -179,26 +179,19 @@ class ShopController extends Controller
             ]);
         }
     }
-    public function get($id){
-        $shop = DB::select("SELECT * FROM shops WHERE id=:id", [':id' => $id]);
+    public function get(){
+        $shop = Shop::where('created_by', auth()->user()->id)->get();
         if($shop)
         {
-            // print_r($shop); exit;
-            $shop = json_decode(json_encode($shop[0]), true);
-            $file_name = $shop['logo'];
-            if(!empty($file_name))
-            {
-                $imageUrl = asset('images/'.$file_name);
-                $shop['imageUrl'] = $imageUrl;
-            } 
             return response([
                 "status"=> "1",
-                "shop" => $shop
+                "shops" => $shop,
+                'baseurl' => asset('images/')
             ]);
         } else {
             return response([
                 "status"=> "0",
-                "message" => "Something went wrong."
+                "message" => "Shop not found."
             ]);
         }
     }

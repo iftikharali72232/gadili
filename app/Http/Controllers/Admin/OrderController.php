@@ -464,6 +464,8 @@ class OrderController extends Controller
 
         $count = Order::where('seller_id', $user->id)->where('manual_order', 0)->count();
 
+        $pcount = Order::where('created_by', $user->id)->count();
+
         // $manualOrderCounter = Order::where('seller_id', $user->id)->where('manual_order', 1)->where('is_response', 0)->count();
 
         // $manual_orders = DB::table('orders')->where('seller_id', $user->id)->where('manual_order', 1)->where('is_response', 0)->orderByDesc('id')->paginate(10);
@@ -472,6 +474,7 @@ class OrderController extends Controller
             'status' => 1,
             'totalSum' => $total,
             'OrderCounter' => $count,
+            'total_products' => $pcount
             // 'manualOrderCounter' => $manualOrderCounter,
             // 'manual_orders' => json_decode(json_encode($manual_orders), true),
             // 'orders' => json_decode(json_encode($orders), true)
