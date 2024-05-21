@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ShopController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CartController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\FileUploadController;
 use App\Http\Controllers\Admin\WishListController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\OrderController;
@@ -138,5 +139,11 @@ Route::group(["middleware"=> "auth:sanctum"], function () {
     Route::apiResource('coupons', CouponController::class);
 
     Route::apiResource('ads', AdController::class);
+
+    
+    Route::post('/uploadFile', [FileUploadController::class, 'upload'])->name('uploadFile');
+
+    
+    Route::get("/sellerAccountHistory", [PaymentController::class, 'sellerAccountHistory'])->name('sellerAccountHistory');
 
 });

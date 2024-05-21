@@ -12,6 +12,9 @@ use App\Models\Shop;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\PaymentMethod;
+use App\Models\Wallet;
+use App\Models\WalletHistory;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -63,5 +66,31 @@ class PaymentController extends Controller
                 "message"=> "Payment list not found"
             ]);
         }
+    }
+
+    public function sellerAccountHistory()
+    {
+        $user = auth()->user();
+        $balance = Wallet::select('amount','id')->where('user_id', $user->id)->first();
+        // print_r($balance->amount);
+
+        $total_earning = Order::where('seller_id', $user->id)->where('order_status', 1)->sum('total');
+
+        $total_withdraw = WalletHistory::where('wallet_id', $balance->id)->where('is_expanse', 1)->sum('amount');
+        // echo $total_withdraw;
+
+        
+        $thirtyDaysAgo = Carbon::now()->subDays(30);
+
+        // Query the orders between these dates
+        $orders = Order::with('user')->where('created_at', '>=', $thirtyDaysAgo)->where('seller_id', $user->id)->where('order_status', 1)->get();
+        // print_r($orders);
+
+        return response()->json([
+            'balance' => $balance->amount,
+            'total_earnings' => $total_earning,
+            'total_withdraw' => $total_withdraw,
+            'last_thirty_days_orders' => $orders
+        ]);
     }
 }
