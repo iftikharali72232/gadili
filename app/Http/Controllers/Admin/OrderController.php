@@ -264,10 +264,11 @@ class OrderController extends Controller
                             $notification->page = 'orders';
                             $notification->save();
 
-                            $notification->user_id = $seller_id; // Assuming the user is authenticated
-                            $notification->message = 'Your order placed successfully';
-                            $notification->page = 'orders';
-                            $notification->save();
+                            $notification1 = new Notification();
+                            $notification1->user_id = $seller_id; // Assuming the user is authenticated
+                            $notification1->message = 'Your order placed successfully';
+                            $notification1->page = 'orders';
+                            $notification1->save();
                             
                             return response([
                                 "status" => "1",
