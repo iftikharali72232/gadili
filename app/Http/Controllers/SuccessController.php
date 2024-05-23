@@ -38,6 +38,12 @@ class SuccessController extends Controller
                     "paid" => $order->total,
                     "due" => 0
                 ]);
+                $userData = User::find($order->seller_id);
+                            $data = [];
+                            $data['title'] = 'New Order';
+                            $data['body'] = 'Your Shop have new order';
+                            $data['device_token'] = $userData->device_token;
+                            User::sendNotification($data);
             }
 
         }

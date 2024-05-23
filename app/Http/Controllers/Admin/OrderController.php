@@ -232,25 +232,13 @@ class OrderController extends Controller
                                 ]);
                                 DB::select("DELETE FROM carts WHERE user_id=".auth()->user()->id);
                                 DB::commit();
-                                $userData = User::find($seller_id);
-                                $data = [];
-                                $data['title'] = 'New Order';
-                                $data['body'] = 'Your Shop have new order';
-                                $data['device_token'] = $userData->device_token;
-                                if(!User::sendNotification($data))
-                                {
-                                    return response([
-                                        "status"=> "1",
-                                        "data" => $res,
-                                        "push_notification_status" => 'Push notification sending faild',
-                                    ]);
-                                }
                                 return response([
                                     'status' => "1",
                                     "data" => $res,
                                     "push_notification_status" => 'Push notification send successfully',
                                 ]);
                             } else {
+
                                 return response([
                                     'status' => "0",
                                     "message" => "Payment success faild."
@@ -263,9 +251,16 @@ class OrderController extends Controller
                             ]);
                             DB::select("DELETE FROM carts WHERE user_id=".auth()->user()->id);
                             DB::commit();
+                            $userData = User::find($seller_id);
+                            $data = [];
+                            $data['title'] = 'New Order';
+                            $data['body'] = 'Your Shop have new order';
+                            $data['device_token'] = $userData->device_token;
+                            
                             return response([
                                 "status" => "1",
-                                "data" => $order
+                                "data" => $order,
+                                'push_notification_status' => User::sendNotification($data)
                             ]);
                             
                         }
@@ -587,23 +582,16 @@ class OrderController extends Controller
             'is_response' => 1
         ]);
         if($order) {
-            $userData = auth()->user();
+            $order = Order::find($data['order_id']);
+            $userData = User::find($order->user_id);
                                 $data = [];
-                                $data['title'] = 'New Order';
-                                $data['body'] = 'Your Shop have new order';
+                                $data['title'] = 'Manual Order Response';
+                                $data['body'] = 'Your manual order ready to purchase';
                                 $data['device_token'] = $userData->device_token;
-                                if(!User::sendNotification($data))
-                                {
-                                    return response([
-                                        "status"=> "1",
-                                        "msg" => "order processing successfully",
-                                        "push_notification_status" => 'Push notification sending faild',
-                                    ]);
-                                }
             return response([
                 'status' => 1,
                 'msg' => 'success',
-                "push_notification_status" => 'Push notification send successfully',
+                "push_notification_status" => User::sendNotification($data)
             ]);
         }else {
             return response([
