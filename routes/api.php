@@ -49,6 +49,7 @@ Route::get('/adminChoiceCategories', [CategoryController::class,'adminChoiceCate
 
 // protected routes
 Route::group(["middleware"=> "auth:sanctum"], function () {
+    Route::post('/test_manual_order', [OrderController::class, 'manualOrder'])->name('test_manual_order');
     // User requests
     Route::get("/user", [AuthController::class,"user"])->name('user');
     Route::get("/logout", [AuthController::class,"logout"])->name('logout');
