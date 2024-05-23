@@ -104,7 +104,7 @@ Route::group(["middleware"=> "auth:sanctum"], function () {
 
     //order apis
     Route::post('/createOrder', [OrderController::class, 'create'])->name('createOrder');
-    Route::post('/manualOrder', [OrderController::class, 'manualOrder'])->name('manualOrder');
+    Route::post('/manualOrder_new', [OrderController::class, 'manualOrder'])->name('manualOrder_new');
     Route::get('/orderList', [OrderController::class, 'orderList'])->name('orderList');
     Route::get('/getOrder/{id}', [OrderController::class, 'get'])->name('getOrder');
     Route::post('/orderPaymentStatus', [OrderController::class, 'orderPaymentStatus'])->name('orderPaymentStatus');
