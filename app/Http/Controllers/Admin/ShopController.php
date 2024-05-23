@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -277,6 +278,49 @@ class ShopController extends Controller
                 "status"=> "0",
                 "message"=> "shops not found"
             ],200);
+        }
+    }
+
+    public function manualOrder(Request $request)
+    {
+        $attrs = $request->validate([
+            "description"=> "required",
+            "shop_id" => "required|int"
+        ]);
+
+        $shop = Shop::find($attrs['shop_id']);
+
+        $order = Order::create([
+            "user_id"=> isset(auth()->user()->id) ? auth()->user()->id : 0,
+            "seller_id" => $shop->created_by,
+            "manual_order" => 1,
+            "description" => $request->description,
+        ]);
+
+        if($order){
+            $userData = User::find($shop->created_by);
+            $data = [];
+            $data['title'] = 'New Menual Order';
+            $data['body'] = 'Your Shop have new manual order';
+            $data['device_token'] = $userData->device_token;
+            if(!User::sendNotification($data))
+            {
+                return response([
+                    "status"=> "1",
+                    "order" => json_decode(json_encode($order), true),
+                    "push_notification_status" => User::sendNotification($data),
+                ]);
+            }
+            return response([
+                "status"=> "1",
+                "order" => json_decode(json_encode($order), true),
+                "push_notification_status" => User::sendNotification($data),
+            ]);
+        } else {
+            return response([
+                "status"=> "0",
+                "message" => "Something Went Wrong",
+            ]);
         }
     }
 }
