@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentMethod;
 use App\Models\CardDetail;
+use App\Models\Notification;
 use App\Models\Wallet;
 use App\Models\WalletHistory;
 
@@ -44,6 +45,18 @@ class SuccessController extends Controller
                             $data['body'] = 'Your Shop have new order';
                             $data['device_token'] = $userData->device_token;
                             User::sendNotification($data);
+
+                $notification = new Notification();
+                $notification->user_id = $order->user_id; // Assuming the user is authenticated
+                $notification->message = 'Your order placed successfully';
+                $notification->page = 'orders';
+                $notification->save();
+
+                $notification = new Notification();
+                $notification->user_id = $order->seller_id; // Assuming the user is authenticated
+                $notification->message = 'Your Shop have new order';
+                $notification->page = 'orders';
+                $notification->save();
             }
 
         }

@@ -50,6 +50,8 @@ Route::get('/adminChoiceCategories', [CategoryController::class,'adminChoiceCate
 // protected routes
 Route::group(["middleware"=> "auth:sanctum"], function () {
     Route::post('/manualOrder', [ShopController::class, 'manualOrder'])->name('manualOrder');
+    Route::get("/notificationList", [ShopController::class, 'notificationList'])->name('notificationList');
+    Route::post("/readNotification", [ShopController::class, 'readNotification'])->name('readNotification');
     // User requests
     Route::get("/user", [AuthController::class,"user"])->name('user');
     Route::get("/logout", [AuthController::class,"logout"])->name('logout');

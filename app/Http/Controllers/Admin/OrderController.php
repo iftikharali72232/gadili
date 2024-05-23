@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\CartController;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -256,6 +257,17 @@ class OrderController extends Controller
                             $data['title'] = 'New Order';
                             $data['body'] = 'Your Shop have new order';
                             $data['device_token'] = $userData->device_token;
+
+                            $notification = new Notification();
+                            $notification->user_id = $seller_id; // Assuming the user is authenticated
+                            $notification->message = 'Your Shop have new order';
+                            $notification->page = 'orders';
+                            $notification->save();
+
+                            $notification->user_id = $seller_id; // Assuming the user is authenticated
+                            $notification->message = 'Your order placed successfully';
+                            $notification->page = 'orders';
+                            $notification->save();
                             
                             return response([
                                 "status" => "1",
@@ -583,6 +595,12 @@ class OrderController extends Controller
         ]);
         if($order) {
             $order = Order::find($data['order_id']);
+            $notification = new Notification();
+                $notification->user_id = $order->user_id; // Assuming the user is authenticated
+                $notification->message = 'Your manual order processed successfully';
+                $notification->page = 'menual_orders';
+                $notification->save();
+
             $userData = User::find($order->user_id);
                                 $data = [];
                                 $data['title'] = 'Manual Order Response';

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Notification;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -298,6 +299,17 @@ class ShopController extends Controller
         ]);
 
         if($order){
+            $notification = new Notification();
+                $notification->user_id = $order->user_id; // Assuming the user is authenticated
+                $notification->message = 'Your manual order placed successfully';
+                $notification->page = 'menual_orders';
+                $notification->save();
+
+                $notification->user_id = $shop->created_by; // Assuming the user is authenticated
+                $notification->message = 'Your Shop have new manual order';
+                $notification->page = 'menual_orders';
+                $notification->save();
+
             $userData = User::find($shop->created_by);
             $data = [];
             $data['title'] = 'New Menual Order';
@@ -315,8 +327,29 @@ class ShopController extends Controller
             ]);
         }
     }
-    function success_ok()
+    
+    function notificationList()
     {
-        echo "success"; 
+        $user = auth()->user();
+
+        $list = Notification::where('is_read', 0)->where('user_id', $user->id)->get();
+        return response()->json(['data' => $list]);
     }
+    function readNotification(Request $req)
+    {
+        $req->validate([
+            'id' => 'required | int',
+            'is_all_read' => 'required'
+        ]);
+
+        if($req->is_all_read == 1)
+        {
+            $notify = Notification::where('user_id', auth()->user()->id)->update(['is_read', 1]);
+            return response()->json(['msg' => 'All notification read successfully']);
+        } else {
+            $notify = Notification::where('user_id', auth()->user()->id)->where('id', $req->id)->update(['is_read', 1]);
+            return response()->json(['msg' => 'Notification read successfully']);
+        }
+    }
+
 }
