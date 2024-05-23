@@ -323,4 +323,8 @@ class ShopController extends Controller
             ]);
         }
     }
+    function success_ok()
+    {
+        echo "success"; 
+    }
 }
