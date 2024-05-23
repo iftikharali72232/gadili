@@ -96,6 +96,6 @@ class User extends Authenticatable
             die('Curl failed: ' . curl_error($ch));
         }
         curl_close($ch);
-        return $result;
+        return json_decode($result, true);
     }
 }
