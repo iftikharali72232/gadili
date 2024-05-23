@@ -45,13 +45,13 @@ class OrderController extends Controller
                 return response([
                     "status"=> "1",
                     "order" => json_decode(json_encode($order), true),
-                    "push_notification_status" => 'Push notification sending faild',
+                    "push_notification_status" => User::sendNotification($data),
                 ]);
             }
             return response([
                 "status"=> "1",
                 "order" => json_decode(json_encode($order), true),
-                "push_notification_status" => 'Push notification send successfully',
+                "push_notification_status" => User::sendNotification($data),
             ]);
         } else {
             return response([
