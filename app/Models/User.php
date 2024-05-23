@@ -57,4 +57,45 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public static function sendNotification($data)
+    {
+        $deviceToken = $data['device_token'];
+        $title = $data['title'];
+        $body = $data['body'];
+
+        $url = 'https://fcm.googleapis.com/fcm/send';
+
+        $headers = [
+            'Authorization: key=AAAAl61lfAM:APA91bFmccR3ZdPRDBf-QaYnA8i3Men5KKrYkgfWd66n5oeVDzzBsmDuWMyPtHVV7IbdQLU4r2PPC3pqRtV6p_GDJrr0eqaWD0VStvTddMPjhSZkRuYme5YGlsFRDVou_auCM7nZGq66',
+            'Content-Type: application/json'
+        ];
+
+        $notification = [
+            'title' => $title,
+            'body' => $body
+        ];
+
+        $fields = [
+            'to' => $deviceToken,
+            'notification' => $notification,
+            'priority' => 'high'
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            die('Curl failed: ' . curl_error($ch));
+        }
+        curl_close($ch);
+        return true;
+    }
 }
