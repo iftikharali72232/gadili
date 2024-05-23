@@ -49,8 +49,7 @@ Route::get('/adminChoiceCategories', [CategoryController::class,'adminChoiceCate
 
 // protected routes
 Route::group(["middleware"=> "auth:sanctum"], function () {
-    Route::post('/test_manual_order', [OrderController::class, 'manualOrder'])->name('test_manual_order');
-    Route::post('/shop_manual_order', [ShopController::class, 'success_ok'])->name('shop_manual_order');
+    Route::post('/shop_manual_order', [ShopController::class, 'manualOrder'])->name('shop_manual_order');
     // User requests
     Route::get("/user", [AuthController::class,"user"])->name('user');
     Route::get("/logout", [AuthController::class,"logout"])->name('logout');
@@ -106,7 +105,6 @@ Route::group(["middleware"=> "auth:sanctum"], function () {
 
     //order apis
     Route::post('/createOrder', [OrderController::class, 'create'])->name('createOrder');
-    Route::post('/manualOrder_new', [OrderController::class, 'manualOrder'])->name('manualOrder_new');
     Route::get('/orderList', [OrderController::class, 'orderList'])->name('orderList');
     Route::get('/getOrder/{id}', [OrderController::class, 'get'])->name('getOrder');
     Route::post('/orderPaymentStatus', [OrderController::class, 'orderPaymentStatus'])->name('orderPaymentStatus');
