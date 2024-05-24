@@ -49,12 +49,14 @@ class SuccessController extends Controller
                 $notification = new Notification();
                 $notification->user_id = $order->user_id; // Assuming the user is authenticated
                 $notification->message = 'Your order placed successfully';
+                $notification->description = $order->description;
                 $notification->page = 'orders';
                 $notification->save();
 
                 $notification1 = new Notification();
                 $notification1->user_id = $order->seller_id; // Assuming the user is authenticated
                 $notification1->message = 'Your Shop have new order';
+                $notification1->description = $order->description;
                 $notification1->page = 'orders';
                 $notification1->save();
             }
