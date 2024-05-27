@@ -303,12 +303,14 @@ class ShopController extends Controller
                 $notification->user_id = $order->user_id; // Assuming the user is authenticated
                 $notification->message = 'Your manual order placed successfully';
                 $notification->description = $request->description;
+                $notification->order_id = $request->order->id;
                 $notification->page = 'menual_orders';
                 $notification->save();
                 $notification1 = new Notification();
                 $notification1->user_id = $shop->created_by; // Assuming the user is authenticated
                 $notification1->message = 'Your Shop have new manual order';
                 $notification1->description = $request->description;
+                $notification1->order_id = $request->order->id;
                 $notification1->page = 'menual_orders';
                 $notification1->save();
 
