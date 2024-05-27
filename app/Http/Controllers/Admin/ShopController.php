@@ -351,7 +351,7 @@ class ShopController extends Controller
             $notify = Notification::where('user_id', auth()->user()->id)->update(['is_read', 1]);
             return response()->json(['msg' => 'All notification read successfully']);
         } else {
-            $notify = Notification::where('user_id', auth()->user()->id)->where('id', $req->id)->update(['is_read', 1]);
+            $notify = Notification::where('id', $req->id)->update(['is_read', 1]);
             return response()->json(['msg' => 'Notification read successfully']);
         }
     }
