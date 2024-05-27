@@ -262,7 +262,7 @@ class OrderController extends Controller
                             $notification->user_id = $seller_id; // Assuming the user is authenticated
                             $notification->message = 'Your Shop have new order';
                             $notification->description = $request->description;
-                            $notification->order_id = $request->order->id;
+                            $notification->order_id = $order->id;
                             $notification->page = 'orders';
                             $notification->save();
 
@@ -270,7 +270,7 @@ class OrderController extends Controller
                             $notification1->user_id = $seller_id; // Assuming the user is authenticated
                             $notification1->message = 'Your order placed successfully';
                             $notification1->description = $request->description;
-                            $notification1->order_id = $request->order->id;
+                            $notification1->order_id = $order->id;
                             $notification1->page = 'orders';
                             $notification1->save();
                             
@@ -604,7 +604,7 @@ class OrderController extends Controller
                 $notification->user_id = $order->user_id; // Assuming the user is authenticated
                 $notification->message = 'Your manual order processed successfully';
                 $notification->description = $request->description;
-                $notification->order_id = $request->$request->order_id;
+                $notification->order_id = $request->order_id;
                 $notification->page = 'menual_orders';
                 $notification->save();
 
