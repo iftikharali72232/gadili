@@ -267,7 +267,7 @@ class OrderController extends Controller
                             $notification->save();
 
                             $notification1 = new Notification();
-                            $notification1->user_id = $seller_id; // Assuming the user is authenticated
+                            $notification1->user_id = auth()->user()->id; // Assuming the user is authenticated
                             $notification1->message = 'Your order placed successfully';
                             $notification1->description = $request->description;
                             $notification1->order_id = $order->id;
