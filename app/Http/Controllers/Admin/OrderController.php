@@ -671,5 +671,98 @@ class OrderController extends Controller
             ]);
     }
 
-    
+    public function getOrders($key,$sellerId, $filter, $startDate = null, $endDate = null, $perPage = 10)
+    {
+        $query = Order::where($key, $sellerId);
+
+        if ($filter === 'this_month') {
+            $query->whereYear('created_at', '=', now()->year)
+                ->whereMonth('created_at', '=', now()->month);
+        } elseif ($filter === 'this_year') {
+            $query->whereYear('created_at', '=', now()->year);
+        } elseif ($filter === 'date_range' && $startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        // You can add more conditions based on your requirements, such as for 'all' filter.
+
+        // Order by created_at in descending order
+        $query->orderBy('created_at', 'desc');
+        // Execute the query and paginate the results
+        $orders = $query->paginate($perPage);
+
+        return $orders;
+    }
+
+    public function getUserOrders(Request $req)
+    {
+        $data = $req->validate([
+            'filter' => 'required',
+            'perPage' => 'required|int'
+        ]);
+        if($data['filter'] == 'date_range')
+        {
+            $data1 = $req->validate([
+                'start_date' => 'required|date',
+                'end_date' => 'required|date'
+            ]);
+            $user = auth()->user();
+            if($user->user_type == 1)
+            {
+                $ordersInRange = $this->getOrders('seller_id', $user->id, 'date_range', $data1['start_date'], $data1['end_date'], $data['perPage']);
+
+            } else if($user->user_type == 2)
+            {
+                $ordersInRange = $this->getOrders('user_id', $user->id, 'date_range', $data1['start_date'], $data1['end_date'], $data['perPage']);
+            }
+
+            return response()->json(['orders' => $ordersInRange]);
+        }
+
+        if($data['filter'] == 'this_month')
+        {
+            $user = auth()->user();
+            if($user->user_type == 1)
+            {
+                $ordersInRange = $this->getOrders('seller_id', $user->id, 'this_month', null, null, $data['perPage']);
+
+            } else if($user->user_type == 2)
+            {
+                $ordersInRange = $this->getOrders('user_id', $user->id, 'this_month', null, null, $data['perPage']);
+            }
+
+            return response()->json(['orders' => $ordersInRange]);
+        }
+
+        if($data['filter'] == 'this_year')
+        {
+            $user = auth()->user();
+            if($user->user_type == 1)
+            {
+                $ordersInRange = $this->getOrders('seller_id', $user->id, 'this_year', null, null, $data['perPage']);
+
+            } else if($user->user_type == 2)
+            {
+                $ordersInRange = $this->getOrders('user_id', $user->id, 'this_year', null, null, $data['perPage']);
+            }
+
+            return response()->json(['orders' => $ordersInRange]);
+        }
+
+        if($data['filter'] == 'all')
+        {
+            $user = auth()->user();
+            if($user->user_type == 1)
+            {
+                $ordersInRange = $this->getOrders('seller_id', $user->id, 'all', null, null, $data['perPage']);
+
+            } else if($user->user_type == 2)
+            {
+                $ordersInRange = $this->getOrders('user_id', $user->id, 'all', null, null, $data['perPage']);
+            }
+
+            return response()->json(['orders' => $ordersInRange]);
+        }
+
+
+    }
 }

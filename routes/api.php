@@ -123,6 +123,7 @@ Route::group(["middleware"=> "auth:sanctum"], function () {
     Route::get("/buyerManualOrderNotify", [OrderController::class, 'buyerManualOrderNotify'])->name('buyerManualOrderNotify');
     Route::get("/allOrderProducts", [OrderController::class, 'allOrderProducts'])->name('allOrderProducts');
     Route::post('/send-notification', [OrderController::class, 'sendNotification'])->name('sendNotification');
+    Route::post("/getUserOrders", [OrderController::class, 'getUserOrders'])->name('getUserOrders');
 
     // Chat APIS
     Route::post('/sendMessage', [MessageController::class, 'sendMessage'])->name('sendMessage');
