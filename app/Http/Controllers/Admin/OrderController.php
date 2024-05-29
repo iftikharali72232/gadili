@@ -341,7 +341,8 @@ class OrderController extends Controller
                         },
                         'orderItems.product.category' => function ($query) {
                             $query->select('id', 'name'); // Assuming the category has these fields
-                        }
+                        },
+                        'user'
                         ])
                         ->select('id', 'total', 'order_status','seller_id', 'user_id', 'payment_method','manual_order','pickup_date_time') // Limit columns for orders
                         ->where("seller_id", "=", auth()->user()->id)
