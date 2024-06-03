@@ -336,7 +336,7 @@ class ShopController extends Controller
     {
         $user = auth()->user();
 
-        $list = Notification::where('is_read', 0)->where('user_id', $user->id)->get();
+        $list = Notification::where('is_read', 0)->where('user_id', $user->id)->orderByDesc('id')->get();
         return response()->json(['data' => $list]);
     }
     function readNotification(Request $req)
