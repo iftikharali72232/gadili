@@ -79,6 +79,12 @@ class User extends Authenticatable
         $fields = [
             'to' => $deviceToken,
             'notification' => $notification,
+            'data' => [
+                'title' => $title,
+                'body' => $body,
+                'priority' => 'high',
+                'order_id' => $data['order_id']
+            ],
             'priority' => 'high'
         ];
 

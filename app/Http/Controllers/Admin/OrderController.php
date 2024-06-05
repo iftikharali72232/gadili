@@ -257,7 +257,7 @@ class OrderController extends Controller
                             $data['title'] = 'New Order';
                             $data['body'] = 'Your Shop have new order';
                             $data['device_token'] = $userData->device_token;
-
+                            $data['order_id'] = $order->id;
                             $notification = new Notification();
                             $notification->user_id = $seller_id; // Assuming the user is authenticated
                             $notification->message = 'Your Shop have new order';
@@ -613,6 +613,7 @@ class OrderController extends Controller
                                 $data['title'] = 'Manual Order Response';
                                 $data['body'] = 'Your manual order ready to purchase';
                                 $data['device_token'] = $userData->device_token;
+                                $data['order_id'] = $order->id;
             return response([
                 'status' => 1,
                 'msg' => 'success',

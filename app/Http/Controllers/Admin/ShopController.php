@@ -319,6 +319,7 @@ class ShopController extends Controller
             $data['title'] = 'New Menual Order';
             $data['body'] = 'Your Shop have new manual order';
             $data['device_token'] = $userData->device_token;
+            $data['order_id'] = $order->id;
             return response([
                 "status"=> "1",
                 "order" => json_decode(json_encode($order), true),

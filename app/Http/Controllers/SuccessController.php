@@ -44,6 +44,7 @@ class SuccessController extends Controller
                             $data['title'] = 'New Order';
                             $data['body'] = 'Your Shop have new order';
                             $data['device_token'] = $userData->device_token;
+                            $data['order_id'] = $order->id;
                             User::sendNotification($data);
 
                 $notification = new Notification();
