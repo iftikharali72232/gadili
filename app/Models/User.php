@@ -68,6 +68,7 @@ class User extends Authenticatable
 
         $headers = [
             'Authorization: key=AAAAl61lfAM:APA91bFmccR3ZdPRDBf-QaYnA8i3Men5KKrYkgfWd66n5oeVDzzBsmDuWMyPtHVV7IbdQLU4r2PPC3pqRtV6p_GDJrr0eqaWD0VStvTddMPjhSZkRuYme5YGlsFRDVou_auCM7nZGq66',
+            // 'Authorization: Bearer d7ae181430917c1d1f4236891513ec83b3e9746e',
             'Content-Type: application/json'
         ];
 
