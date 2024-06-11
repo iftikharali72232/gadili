@@ -270,7 +270,7 @@ class OrderController extends Controller
                             $notification1->user_id = auth()->user()->id; // Assuming the user is authenticated
                             $notification1->message = 'Your order placed successfully';
                             $notification1->description = $request->description;
-                            $notification1->order_id = $order->id;
+                            $notification1->order_id = $order['id'];
                             $notification1->page = 'orders';
                             $notification1->save();
                             
