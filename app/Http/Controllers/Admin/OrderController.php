@@ -257,12 +257,12 @@ class OrderController extends Controller
                             $data['title'] = 'New Order';
                             $data['body'] = 'Your Shop have new order';
                             $data['device_token'] = $userData->device_token;
-                            $data['order_id'] = $order->id;
+                            $data['order_id'] = $order['id'];
                             $notification = new Notification();
                             $notification->user_id = $seller_id; // Assuming the user is authenticated
                             $notification->message = 'Your Shop have new order';
                             $notification->description = $request->description;
-                            $notification->order_id = $order->id;
+                            $notification->order_id = $order['id'];
                             $notification->page = 'orders';
                             $notification->save();
 
